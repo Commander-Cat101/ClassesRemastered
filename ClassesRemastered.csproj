@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <RootNamespace>ClassesRemastered</RootNamespace>
+        <Configurations>Debug;Release</Configurations>
+        <Nullable>enable</Nullable>
+        <AssemblyName>ClassesRemastered</AssemblyName>
+        <LangVersion>latest</LangVersion>
+        <Optimize>False</Optimize>
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+    <ItemGroup>
+      <None Remove="UI\Assets\Giant.png" />
+      <None Remove="UI\Assets\Infantry.png" />
+      <None Remove="UI\Assets\None.png" />
+    </ItemGroup>
+
+    <Import Project="..\btd6.targets" />
+</Project>

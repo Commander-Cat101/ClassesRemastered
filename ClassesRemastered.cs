@@ -18,8 +18,8 @@ namespace ClassesRemastered;
 
 public class ClassesRemasteredMain : BloonsTD6Mod
 {
-    public static ClassBase[] addonclasses = { };
-    public static ClassBase[] classes = {};
+    internal static ClassBase[] addonclasses = { };
+    internal static ClassBase[] classes = {};
     public static ClassBase? activeclass = new None();
     public override void OnApplicationStart()
     {

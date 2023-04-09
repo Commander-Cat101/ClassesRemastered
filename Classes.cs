@@ -1,7 +1,11 @@
 ﻿using BTD_Mod_Helper.Api;
+using BTD_Mod_Helper.Api.Display;
 using BTD_Mod_Helper.Extensions;
+using Il2CppAssets.Scripts.Models.GenericBehaviors;
 using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Weapons;
@@ -19,38 +23,10 @@ using UnityEngine;
 
 namespace ClassesRemastered
 {
-    public abstract class ClassBase
-    {
-        public virtual bool ShowInSelector { get; set; } = true;
-        /// <summary>
-        /// The name of the class
-        /// </summary>
-        public abstract string Name { get; }
-        /// <summary>
-        /// The description for the class
-        /// </summary>
-        public abstract string Description { get; }
-        /// <summary>
-        /// The pros that will be shown in the class select screen
-        /// </summary>
-        public abstract string Pros { get; }
-        /// <summary>
-        /// The cons that will be shown in the class select screen
-        /// </summary>
-        public abstract string Cons { get; }
-        /// <summary>
-        /// The icon for the class
-        /// </summary>
-        public abstract Sprite Icon { get; }
-        /// <summary>
-        /// Edits each tower once placed or upgraded
-        /// </summary>
-        /// <param name="tower">The placed or upgraded tower</param>
-        public abstract void EditTower(Tower tower);
-    }
     
     public class None : ClassBase
     {
+        public override int EffectsHeight => 800;
         public override string Name => "Dart Monkey";
         public override string Description => "The Dart Monkey does nothing but scratch thier butt";
         public override string Pros => "Dart monkeys will scratch thier butt :)";
@@ -61,26 +37,58 @@ namespace ClassesRemastered
        
         public override void EditTower(Tower tower)
         {
+
         }
         
     }
     public class Infantry : ClassBase
     {
-        public override bool ShowInSelector => false;
         public override string Name => "Infantry";
         public override string Description => "The Infantry excels at close quarters combat, teaching close combat monkey advanced tactics never seen before";
 
-        public override string Pros => "Null";
+        public override int EffectsHeight => 1200;
 
-        public override string Cons => "Null";
+        public override string Pros => "All Close Combat Towers Get More Attack Speed\nAll Close Combat Towers Get +1 Damage\nAll Close Combat Monkeys Gain Be Ability To Sometimes Push Back Bloons";
+
+        public override string Cons => "All Non Close Combat Monkeys Lose Attack Speed, and 1 Damage";
 
         public override Sprite Icon => ModContent.GetSprite<ClassesRemasteredMain>("Infantry");
         public override void EditTower(Tower tower)
         {
+            var model = tower.rootModel.Duplicate().Cast<TowerModel>();
+            if (model.range <= 40)
+            {
+                foreach (var weapon in model.GetDescendants<WeaponModel>().ToArray())
+                {
+                    weapon.rate *= 0.7f;
+                }
+                foreach (var weapon in model.GetDescendants<DamageModel>().ToArray())
+                {
+                    weapon.damage += 1;
+                }
+                foreach (var weapon in model.GetDescendants<ProjectileModel>().ToArray())
+                {
+                    weapon.pierce += 1;
+                    weapon.AddBehavior(new WindModel("WindModelAddedByClass", 5, 10, 0.04f, true, ""));
+                }
+            }
+            else
+            {
+                foreach (var weapon in model.GetDescendants<WeaponModel>().ToArray())
+                {
+                    weapon.rate *= 1.2f;
+                }
+                foreach (var weapon in model.GetDescendants<DamageModel>().ToArray())
+                {
+                    weapon.damage -= 1;
+                }
+            }
+            tower.UpdateRootModel(model);
         }
     }
     public class Giant : ClassBase
     {
+        public override int EffectsHeight => 1200;
         public override string Name => "Giant";
         public override string Description => "With Dr.Monkey's Giant Potion all monkeys can grow to the size of pat fusty";
 
@@ -121,7 +129,7 @@ namespace ClassesRemastered
             {
                 foreach (var weapon in Tower.GetDescendants<WeaponModel>().ToArray())
                 {
-                    weapon.rate *= 0.66f;
+                    weapon.rate *= 0.75f;
                 }
             }
             else
@@ -132,6 +140,195 @@ namespace ClassesRemastered
                 }
             }
             tower.UpdateRootModel(Tower);
+        }
+    }
+    public class Economist : ClassBase
+    {
+        public override int EffectsHeight => 1400;
+        public override string Name => "Economist";
+        public override string Description => "The fiscally-responsible Economist Class makes cash generation and tax evasion insanely easy, but as a result some monkeys are less powerful";
+
+        public override string Pros => "Cash gain for all sources is increased by 20%\nBenjamin's bank hack gives an extra 10% cash gain";
+
+        public override string Cons => "All Towers Lose 1 damage (1 minimum damage)\nAll Towers Lose 2 pierce (1 minimum pierce)\nAll T4 and up towers get 10% slower attack speed";
+
+        public override Sprite Icon => ModContent.GetSprite<ClassesRemasteredMain>("Economist");
+        public override float CashMultiplier => 1.2f; 
+        public override void EditTower(Tower tower)
+        {
+            var Model = tower.rootModel.Duplicate().Cast<TowerModel>();
+
+            foreach (var weapon in Model.GetDescendants<WeaponModel>().ToArray())
+            {
+                if (!Model.IsHero())
+                {
+                    if (Model.tiers.Max() > 3)
+                    {
+                        weapon.Rate *= 1.1f;
+                    }
+                }
+            }
+            foreach (var projectile in Model.GetDescendants<ProjectileModel>().ToArray())
+            {
+                if (projectile.pierce > 2)
+                {
+                    projectile.pierce -= 2;
+                }
+                else
+                {
+                    projectile.pierce = 1;
+                }
+            }
+            foreach (var damage in Model.GetDescendants<DamageModel>().ToArray())
+            {
+                if (damage.damage > 1)
+                {
+                    damage.damage -= 1;
+                }
+            }
+            if (Model.baseId == TowerType.Benjamin)
+            {
+                if (Model.tiers[0] > 4)
+                {
+                    Model.GetBehavior<BananaCashIncreaseSupportModel>().multiplier += .1f;
+                }
+            }
+            tower.UpdateRootModel(Model);
+        }
+    }
+    public class Necromancer : ClassBase
+    {
+        public override int EffectsHeight => 1200;
+        public override string Name => "Necromancer";
+        public override string Description => "The power of the Necromancer Class gives many abilities. One being your fellow necromancers gain the power of sacrifice and the other being the power of strength at the loss of money";
+
+        public override string Pros => "Ezili gets a 50% attack speed buff\n004 Wizard Monkey Gets Double The Space In Its Graveyard\n004 & 005 Wizard Monkeys Get Double Attack Speed\nAll 'Evil' Towers get a small buff";
+
+        public override string Cons => "ALL Cash Gain is cut by 15%";
+
+        public override Sprite Icon => ModContent.GetSprite<ClassesRemasteredMain>("Necromancer");
+        public override float CashMultiplier => 0.85f;
+        public override void EditTower(Tower tower)
+        {
+            var towerModel = tower.rootModel.Duplicate().Cast<TowerModel>();
+            switch (towerModel.baseId)
+            {
+                case "WizardMonkey":
+                    if (tower.towerModel.tiers[2] == 4)
+                    {
+                        var newEmi = new NecromancerEmissionModel("EmissionModel", 1000, 50, 1, 5, 10, 50, 5, null, null, null, 5, 100, 10, 200, 2);
+                        tower.towerModel.behaviors.First(a => a.name == "AttackModel_Attack Necromancer_").Cast<AttackModel>().weapons[0].emission.Cast<NecromancerEmissionModel>().maxRbeStored = 1000;
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .5f;
+                        }
+                    }
+                    if (tower.towerModel.tiers[2] == 5)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .5f;
+                        }
+                    }
+                    break;
+                case "Ezili":
+                    foreach (var weapon in towerModel.GetWeapons())
+                    {
+                        weapon.Rate *= .75f;
+                    }
+                    foreach (var abilitymod in towerModel.GetAbilities())
+                    {
+                        abilitymod.Cooldown *= .75f;
+                    }
+                    break;
+                case "IceMonkey":
+                    if (towerModel.tiers[0] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "MonkeyBuccaneer":
+                    if (towerModel.tiers[1] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "DartlingGunner":
+                    if (towerModel.tiers[1] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    if (towerModel.tiers[0] >= 4)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "SuperMonkey":
+                    if (towerModel.tiers[1] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "NinjaMonkey":
+                    if (towerModel.tiers[2] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "Alchemist":
+                    if (towerModel.tiers[1] >= 4)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "Druid":
+                    if (towerModel.tiers[2] >= 2)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "SpikeFactory":
+                    if (towerModel.tiers[0] >= 3)
+                    {
+                        foreach (var weapon in towerModel.GetWeapons())
+                        {
+                            weapon.Rate *= .85f;
+                        }
+                    }
+                    break;
+                case "MonkeyVillage":
+                    foreach (var attackmodel in towerModel.GetAttackModels())
+                    {
+                        attackmodel.range *= .7f;
+                    }
+                    break;
+
+            }
+            tower.UpdateRootModel(towerModel);
         }
     }
 }

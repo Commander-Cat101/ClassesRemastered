@@ -10,8 +10,11 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
+      <None Remove="UI\Assets\Economist.png" />
       <None Remove="UI\Assets\Giant.png" />
+      <None Remove="UI\Assets\Icon.png" />
       <None Remove="UI\Assets\Infantry.png" />
+      <None Remove="UI\Assets\Necromancer.png" />
       <None Remove="UI\Assets\None.png" />
     </ItemGroup>
 

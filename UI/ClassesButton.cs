@@ -18,8 +18,8 @@ using ClassesRemastered;
 public static class ClassesButton
 {
     private static ModHelperPanel panel;
-    public static ModHelperButton image;
-    public static Sprite Icon = ModContent.GetSprite<ClassesRemasteredMain>("None");
+    internal static ModHelperButton image;
+    internal static Sprite Icon = ModContent.GetSprite<ClassesRemasteredMain>("None");
     private static void OpenClassesUI()
     {
         MenuManager.instance.buttonClickSound.Play("ClickSounds");

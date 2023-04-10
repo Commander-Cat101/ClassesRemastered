@@ -84,30 +84,30 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
         GenerateEffects(ClassesRemasteredMain.Activeclass.EffectsHeight);
     }
 
-    private ModHelperPanel CreateClass(BaseClass baseClass)
+    private ModHelperPanel CreateClass(BaseClass @class)
     {
-        var panel = ModHelperPanel.Create(new Info("ClassContent" + baseClass.Name, 0, 0, 1500, 700), VanillaSprites.MainBGPanelGrey);
-        panel.AddText(new Info("ClassName", -300, 250, 800, 100), baseClass.Name, 80, TextAlignmentOptions.TopLeft);
-        var desc = panel.AddText(new Info("ClassDescription", -350, -100, 700, 450), baseClass.Description, 60, TextAlignmentOptions.TopLeft);
+        var panel = ModHelperPanel.Create(new Info("ClassContent" + @class.Name, 0, 0, 1500, 700), VanillaSprites.MainBGPanelGrey);
+        panel.AddText(new Info("ClassName", -300, 250, 800, 100), @class.Name, 80, TextAlignmentOptions.TopLeft);
+        var desc = panel.AddText(new Info("ClassDescription", -350, -100, 700, 450), @class.Description, 60, TextAlignmentOptions.TopLeft);
         desc.transform.GetComponent<NK_TextMeshProUGUI>().enableAutoSizing = true;
 
         var button = panel.AddButton(new Info("ClassImage", 500, -100, 400, 400), VanillaSprites.WoodenRoundButton, new System.Action(() =>
         {
-            SetClass(baseClass);
+            SetClass(@class);
             GetScrollContent();
             ReloadRightPanel();
             ClassesButton.SetIcon();
         }));
-        button.Image.SetSprite(baseClass.Icon);
-        if (ClassesRemasteredMain.Activeclass == baseClass)
+        button.Image.SetSprite(@class.Icon);
+        if (ClassesRemasteredMain.Activeclass == @class)
         {
             button.AddImage(new Info("SelectedTick", 150, 150, 150, 150), VanillaSprites.SelectedTick);
         }
 
         return panel;
     }
-    private static void SetClass(BaseClass baseClass)
+    private static void SetClass(BaseClass @class)
     {
-        ClassesRemasteredMain.Activeclass = baseClass;
+        ClassesRemasteredMain.Activeclass = @class;
     }
 }

@@ -11,7 +11,7 @@ public partial class ClassesRemasteredMain
 {
     [HarmonyPatch(typeof(MenuManager), nameof(MenuManager.OpenMenu))]
     [HarmonyPostfix]
-    private static void MenuManager_OpenMenu_Postfix(MenuManager __instance, string menuName)
+    private static void MenuManager_OpenMenu_Postfix(MenuManager instance, string menuName)
     {
         if (menuName == "MapSelectScreen")
             ClassesButton.Show();

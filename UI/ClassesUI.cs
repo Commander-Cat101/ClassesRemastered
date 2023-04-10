@@ -10,7 +10,6 @@ using Il2CppAssets.Scripts.Unity.UI_New;
 using Il2CppAssets.Scripts.Unity.UI_New.ChallengeEditor;
 using Il2CppNinjaKiwi.Common;
 using Il2CppTMPro;
-using MelonLoader;
 using UnityEngine;
 
 namespace ClassesRemastered.UI;
@@ -18,9 +17,9 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
 {
     private ModHelperScrollPanel? _scrollPanel;
 
-    ModHelperText TitleText;
-    ModHelperText DescriptionText;
-    ModHelperScrollPanel EffectsPanel;
+    ModHelperText _titleText;
+    ModHelperText _descriptionText;
+    ModHelperScrollPanel _effectsPanel;
     public override bool OnMenuOpened(Il2CppSystem.Object data)
     {
         CommonForegroundScreen.instance.heading.SetActive(true);
@@ -33,29 +32,29 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
         CreateRightMenu(MainPanel);
         return false;
     }
-    private void CreateLeftMenu(ModHelperPanel ClassesMenu)
+    private void CreateLeftMenu(ModHelperPanel classesMenu)
     {
-        _scrollPanel = ClassesMenu.AddScrollPanel(new Info("LeftScrollMenu", -900, 0, 1600, 1900), RectTransform.Axis.Vertical, VanillaSprites.MainBGPanelBlue, 50, 50);
+        _scrollPanel = classesMenu.AddScrollPanel(new Info("LeftScrollMenu", -900, 0, 1600, 1900), RectTransform.Axis.Vertical, VanillaSprites.MainBGPanelBlue, 50, 50);
         GetScrollContent();
     }
-    private void CreateRightMenu(ModHelperPanel ClassesMenu)
+    private void CreateRightMenu(ModHelperPanel classesMenu)
     {
-        var Panel = ClassesMenu.AddPanel(new Info("RightMenu", 900, 0, 1600, 1900), VanillaSprites.MainBGPanelBlue);
+        var Panel = classesMenu.AddPanel(new Info("RightMenu", 900, 0, 1600, 1900), VanillaSprites.MainBGPanelBlue);
         var TitlePanel = Panel.AddPanel(new Info("ClassName", 0, 775, 1450, 200), VanillaSprites.BlueInsertPanelRound);
-        TitleText = TitlePanel.AddText(new Info("ClassNameText", 0, 0, 1450, 200), ClassesRemasteredMain.Activeclass.Name, 150);
+        _titleText = TitlePanel.AddText(new Info("ClassNameText", 0, 0, 1450, 200), ClassesRemasteredMain.Activeclass.Name, 150);
 
         var DescriptionPanel = Panel.AddPanel(new Info("ClassDescription", 0, 300, 1450, 700), VanillaSprites.BlueInsertPanelRound);
-        DescriptionText = DescriptionPanel.AddText(new Info("ClassDescriptionText", 0, 0, 1350, 700), ClassesRemasteredMain.Activeclass.Description, 80);
+        _descriptionText = DescriptionPanel.AddText(new Info("ClassDescriptionText", 0, 0, 1350, 700), ClassesRemasteredMain.Activeclass.Description, 80);
 
-        EffectsPanel = Panel.AddScrollPanel(new Info("ClassEffect", 0, -500, 1450, 775), RectTransform.Axis.Vertical,VanillaSprites.BlueInsertPanelRound, 100, 100);
+        _effectsPanel = Panel.AddScrollPanel(new Info("ClassEffect", 0, -500, 1450, 775), RectTransform.Axis.Vertical,VanillaSprites.BlueInsertPanelRound, 100, 100);
         GenerateEffects(ClassesRemasteredMain.Activeclass.EffectsHeight);
     }
-    void GenerateEffects(int Height = 800)
+    void GenerateEffects(int height = 800)
     {
         string Effects = "- Pros \n" + ClassesRemasteredMain.Activeclass.Pros + "\n\n- Cons \n" + ClassesRemasteredMain.Activeclass.Cons;
-        if (EffectsPanel != null)
+        if (_effectsPanel != null)
         {
-            EffectsPanel.AddScrollContent(ModHelperText.Create(new Info("ClassEffectsText", 0, 0, 1400, Height), Effects, 80, TextAlignmentOptions.TopLeft));
+            _effectsPanel.AddScrollContent(ModHelperText.Create(new Info("ClassEffectsText", 0, 0, 1400, height), Effects, 80, TextAlignmentOptions.TopLeft));
         }
     }
     void GetScrollContent()
@@ -78,9 +77,9 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
     }
     void ReloadRightPanel()
     {
-        EffectsPanel.ScrollContent.transform.DestroyAllChildren();
-        TitleText.SetText(ClassesRemasteredMain.Activeclass.Name);
-        DescriptionText.SetText(ClassesRemasteredMain.Activeclass.Description);
+        _effectsPanel.ScrollContent.transform.DestroyAllChildren();
+        _titleText.SetText(ClassesRemasteredMain.Activeclass.Name);
+        _descriptionText.SetText(ClassesRemasteredMain.Activeclass.Description);
         GenerateEffects(ClassesRemasteredMain.Activeclass.EffectsHeight);
     }
 

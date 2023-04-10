@@ -1,5 +1,4 @@
-﻿using BTD_Mod_Helper;
-using BTD_Mod_Helper.Extensions;
+﻿using BTD_Mod_Helper.Extensions;
 using HarmonyLib;
 using Il2CppAssets.Scripts.Simulation;
 using Il2CppAssets.Scripts.Simulation.Tracking;

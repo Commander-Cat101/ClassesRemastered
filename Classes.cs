@@ -24,14 +24,14 @@ using UnityEngine;
 namespace ClassesRemastered
 {
     
-    public class None : ClassBase
+    public class None : BaseClass
     {
         public override int EffectsHeight => 800;
         public override string Name => "Dart Monkey";
         public override string Description => "The Dart Monkey does nothing but scratch thier butt";
-        public override string Pros => "Dart monkeys will scratch thier butt :)";
+        public override string Pros => "Dart monkeys will scratch their butt :)";
 
-        public override string Cons => "Dart monkeys will scratch thier butt :(";
+        public override string Cons => "Dart monkeys will scratch their butt :(";
 
         public override Sprite Icon => ModContent.GetSprite<ClassesRemasteredMain>("None");
        
@@ -41,7 +41,7 @@ namespace ClassesRemastered
         }
         
     }
-    public class Infantry : ClassBase
+    public class Infantry : BaseClass
     {
         public override string Name => "Infantry";
         public override string Description => "The Infantry excels at close quarters combat, teaching close combat monkey advanced tactics never seen before";
@@ -86,7 +86,7 @@ namespace ClassesRemastered
             tower.UpdateRootModel(model);
         }
     }
-    public class Giant : ClassBase
+    public class Giant : BaseClass
     {
         public override int EffectsHeight => 1200;
         public override string Name => "Giant";
@@ -142,7 +142,7 @@ namespace ClassesRemastered
             tower.UpdateRootModel(Tower);
         }
     }
-    public class Economist : ClassBase
+    public class Economist : BaseClass
     {
         public override int EffectsHeight => 1400;
         public override string Name => "Economist";
@@ -196,7 +196,7 @@ namespace ClassesRemastered
             tower.UpdateRootModel(Model);
         }
     }
-    public class Necromancer : ClassBase
+    public class Necromancer : BaseClass
     {
         public override int EffectsHeight => 1200;
         public override string Name => "Necromancer";

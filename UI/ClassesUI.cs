@@ -13,6 +13,8 @@ using ClassesRemastered;
 using Il2CppNinjaKiwi.Common;
 using Il2CppAssets.Scripts.Unity.UI_New.Quests;
 using Il2Cpp;
+using System.Linq;
+using MelonLoader;
 
 namespace ClassesMenuUI;
 public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
@@ -65,7 +67,13 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
     void GetScrollContent()
     {
         ScrollPanel.ScrollContent.transform.DestroyAllChildren();
-        foreach (var Class in ClassesRemasteredMain.classes)
+
+        foreach (var @class in GetContent<BaseClass>().OrderByDescending(c => c.mod == mod))
+        {
+            ScrollPanel.AddScrollContent(CreateClass(@class));
+        }
+
+        /*foreach (var Class in ClassesRemasteredMain.classes)
         {
             try
             {
@@ -86,7 +94,7 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
                 }
             }
             catch { }
-        }
+        }*/
     }
     void ReloadRightPanel()
     {
@@ -95,7 +103,7 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
         DescriptionText.SetText(ClassesRemasteredMain.activeclass.Description);
         GenerateEffects(ClassesRemasteredMain.activeclass.EffectsHeight);
     }
-    public ModHelperPanel CreateClass(ClassBase Class)
+    public ModHelperPanel CreateClass(BaseClass Class)
     {
         var panel = ModHelperPanel.Create(new Info("ClassContent" + Class.Name, 0, 0, 1500, 700), VanillaSprites.MainBGPanelGrey);
         panel.AddText(new Info("ClassName", -300, 250, 800, 100), Class.Name, 80, TextAlignmentOptions.TopLeft);
@@ -117,7 +125,7 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
 
         return panel;
     }
-    private void SetClass(ClassBase Class)
+    private void SetClass(BaseClass Class)
     {
         ClassesRemasteredMain.activeclass = Class;
     }

@@ -1,66 +1,44 @@
-﻿using BTD_Mod_Helper.Api.Components;
-using BTD_Mod_Helper.Api.Enums;
+﻿using System;
 using BTD_Mod_Helper.Api;
-using UnityEngine;
+using BTD_Mod_Helper.Api.Components;
+using BTD_Mod_Helper.Api.Enums;
 using BTD_Mod_Helper.Extensions;
-using BTD_Mod_Helper.UI.Menus;
-using Random = System.Random;
-using ClassesMenuUI;
-using MelonLoader;
-using TaskScheduler = BTD_Mod_Helper.Api.TaskScheduler;
 using Il2CppAssets.Scripts.Unity.Menu;
 using Il2CppAssets.Scripts.Unity.UI_New;
-using Il2CppAssets.Scripts.Simulation.Towers.Filters;
-using Il2CppAssets.Scripts.Models.Towers.Filters;
-using System;
-using ClassesRemastered;
+using UnityEngine;
+using TaskScheduler = BTD_Mod_Helper.Api.TaskScheduler;
+
+namespace ClassesRemastered.UI;
 
 public static class ClassesButton
 {
-    private static ModHelperPanel panel;
-    internal static ModHelperButton image;
-    internal static Sprite Icon = ModContent.GetSprite<ClassesRemasteredMain>("None");
+    private static ModHelperPanel? _panel;
+    private static ModHelperButton? _image;
+
     private static void OpenClassesUI()
     {
         MenuManager.instance.buttonClickSound.Play("ClickSounds");
         ModGameMenu.Open<ClassesUI>();
     }
 
-    public static void CreatePanel(GameObject screen)
+    private static void CreatePanel(GameObject screen)
     {
-        //Random rnd = new Random();
-        //int Randomnumber = rnd.Next(1, 5);
-        /*switch (Randomnumber)
-        {
-            case 1:
-                Icon = VanillaSprites.PrimaryBtn2;
-                break;
-            case 2:
-                Icon = VanillaSprites.MilitaryBtn2;
-                break;
-            case 3:
-                Icon = VanillaSprites.MagicBtn2;
-                break;
-            case 4:
-                Icon = VanillaSprites.SupportBtn;
-                break;
-        }*/
-        panel = screen.AddModHelperPanel(new Info("ClassesButton")
+        _panel = screen.AddModHelperPanel(new Info("ClassesButton")
         {
             Anchor = new Vector2(1, 0),
             Pivot = new Vector2(1, 0)
         });
 
-        var animator = panel.AddComponent<Animator>();
+        var animator = _panel.AddComponent<Animator>();
         animator.runtimeAnimatorController = Animations.PopupAnim;
         animator.speed = .75f;
 
-        image = panel.AddButton(new Info("ClassesMenuButton", 0, 0, 400, 400, new Vector2(1, 0), new Vector2(0.5f, 0)), VanillaSprites.WoodenRoundButton, new Action(OpenClassesUI));
-        image.AddText(new Info("Text", 0, -175, 1000, 200), "Classes", 70f);
+        _image = _panel.AddButton(new Info("ClassesMenuButton", 0, 0, 400, 400, new Vector2(1, 0), new Vector2(0.5f, 0)), VanillaSprites.WoodenRoundButton, new Action(OpenClassesUI));
+        _image.AddText(new Info("Text", 0, -175, 1000, 200), "Classes", 70f);
 
 
         var mainMenuTransform = screen.transform.Cast<RectTransform>();
-        var matchLocalPosition = image.transform.gameObject.AddComponent<MatchLocalPosition>();
+        var matchLocalPosition = _image.transform.gameObject.AddComponent<MatchLocalPosition>();
         var bottomGroup = mainMenuTransform.FindChild("Friends");
         matchLocalPosition.transformToCopy = bottomGroup.transform.GetChild(0);
 
@@ -93,15 +71,17 @@ public static class ClassesButton
 
     private static void HideButton()
     {
-        panel.GetComponent<Animator>().Play("PopupSlideOut");
-        TaskScheduler.ScheduleTask(() => panel.SetActive(false), ScheduleType.WaitForFrames, 13);
+        if (_panel == null) return;
+        _panel.GetComponent<Animator>().Play("PopupSlideOut");
+        TaskScheduler.ScheduleTask(() => _panel.SetActive(false), ScheduleType.WaitForFrames, 13);
     }
 
     public static void Show()
     {
         Init();
-        panel.SetActive(true);
-        panel.GetComponent<Animator>().Play("PopupSlideIn");
+        if (_panel == null) return;
+        _panel.SetActive(true);
+        _panel.GetComponent<Animator>().Play("PopupSlideIn");
     }
 
     public static void Hide()
@@ -113,6 +93,6 @@ public static class ClassesButton
     }
     public static void SetIcon()
     {
-        image.Image.SetSprite(ClassesRemasteredMain.activeclass.Icon);
+        _image.Image.SetSprite(ClassesRemasteredMain.Activeclass.Icon);
     }
 }

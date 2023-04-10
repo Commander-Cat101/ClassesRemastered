@@ -1,66 +1,53 @@
-﻿
+﻿using ClassesRemastered.UI;
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Unity.Menu;
 using Il2CppAssets.Scripts.Unity.UI_New.Main.DifficultySelect;
 using Il2CppAssets.Scripts.Unity.UI_New.Main.MapSelect;
 
-[HarmonyPatch(typeof(MenuManager), nameof(MenuManager.OpenMenu))]
-internal static class MenuManager_OpenMenu
+namespace ClassesRemastered;
+
+public partial class ClassesRemasteredMain
 {
+    [HarmonyPatch(typeof(MenuManager), nameof(MenuManager.OpenMenu))]
     [HarmonyPostfix]
-    private static void Postfix(MenuManager __instance, string menuName)
+    private static void MenuManager_OpenMenu_Postfix(MenuManager instance, string menuName)
     {
         if (menuName == "MapSelectScreen")
             ClassesButton.Show();
     }
-}
-
-[HarmonyPatch(typeof(DifficultySelectScreen), nameof(DifficultySelectScreen.Open))]
-internal static class DifficultySelectScreen_Open
-{
+    
+    [HarmonyPatch(typeof(DifficultySelectScreen), nameof(DifficultySelectScreen.Open))]
     [HarmonyPostfix]
-    private static void Postfix()
+    private static void DifficultySelectScreen_Open_Postfix()
     {
         ClassesButton.Hide();
     }
-}
-
-[HarmonyPatch(typeof(DifficultySelectScreen), nameof(DifficultySelectScreen.OpenModeSelectUi))]
-internal static class DifficultySelectScreen_OpenModeSelectUi
-{
+    
+    [HarmonyPatch(typeof(DifficultySelectScreen), nameof(DifficultySelectScreen.OpenModeSelectUi))]
     [HarmonyPostfix]
-    private static void Postfix()
+    private static void DifficultySelectScreen_OpenModeSelectUi_Postfix()
     {
         ClassesButton.Hide();
     }
-}
-
-[HarmonyPatch(typeof(ContinueGamePanel), nameof(ContinueGamePanel.ContinueClicked))]
-internal static class ContinueGamePanel_ContinueClicked
-{
+    
+    [HarmonyPatch(typeof(ContinueGamePanel), nameof(ContinueGamePanel.ContinueClicked))]
     [HarmonyPostfix]
-    private static void Postfix()
+    private static void ContinueGamePanel_ContinueClicked_Postfix()
     {
         ClassesButton.Hide();
     }
-}
-
-[HarmonyPatch(typeof(MapSelectScreen), nameof(MapSelectScreen.Open))]
-internal static class MapSelectScreen_Open
-{
+    
+    [HarmonyPatch(typeof(MapSelectScreen), nameof(MapSelectScreen.Open))]
     [HarmonyPostfix]
-    private static void Postfix()
+    private static void MapSelectScreen_Open_Postfix()
     {
         ClassesButton.Show();
     }
-}
-
-[HarmonyPatch(typeof(MapSelectScreen), nameof(MapSelectScreen.Close))]
-internal static class MapSelectScreen_Close
-{
+    
+    [HarmonyPatch(typeof(MapSelectScreen), nameof(MapSelectScreen.Close))]
     [HarmonyPostfix]
-    private static void Postfix()
+    private static void MapSelectScreen_Close_Postfix()
     {
         ClassesButton.Hide();
     }

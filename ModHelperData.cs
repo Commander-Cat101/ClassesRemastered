@@ -3,7 +3,7 @@ namespace ClassesRemastered;
 public static class ModHelperData
 {
     public static string WorksOnVersion = "36";
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Name = "Classes Remastered";
 
     public static string Description = "A remastered version of the ClassesMod. Adds classes to the game";

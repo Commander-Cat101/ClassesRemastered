@@ -18,8 +18,8 @@ using ClassesRemastered;
 public static class ClassesButton
 {
     private static ModHelperPanel panel;
-    internal static ModHelperButton image;
-    internal static Sprite Icon = ModContent.GetSprite<ClassesRemasteredMain>("None");
+    private static ModHelperButton image;
+    internal static readonly Sprite Icon = ModContent.GetSprite<ClassesRemasteredMain>("None");
     private static void OpenClassesUI()
     {
         MenuManager.instance.buttonClickSound.Play("ClickSounds");
@@ -28,23 +28,6 @@ public static class ClassesButton
 
     public static void CreatePanel(GameObject screen)
     {
-        //Random rnd = new Random();
-        //int Randomnumber = rnd.Next(1, 5);
-        /*switch (Randomnumber)
-        {
-            case 1:
-                Icon = VanillaSprites.PrimaryBtn2;
-                break;
-            case 2:
-                Icon = VanillaSprites.MilitaryBtn2;
-                break;
-            case 3:
-                Icon = VanillaSprites.MagicBtn2;
-                break;
-            case 4:
-                Icon = VanillaSprites.SupportBtn;
-                break;
-        }*/
         panel = screen.AddModHelperPanel(new Info("ClassesButton")
         {
             Anchor = new Vector2(1, 0),
@@ -87,7 +70,9 @@ public static class ClassesButton
         var screen = CommonForegroundScreen.instance.transform;
         var ModSavePanel = screen.FindChild("ClassesButton");
         if (ModSavePanel == null)
+        {
             CreatePanel(screen.gameObject);
+        }
     }
 
 
@@ -109,10 +94,12 @@ public static class ClassesButton
         var screen = CommonForegroundScreen.instance.transform;
         var ModSavePanel = screen.FindChild("ClassesButton");
         if (ModSavePanel != null)
+        {
             HideButton();
+        }
     }
     public static void SetIcon()
     {
-        image.Image.SetSprite(ClassesRemasteredMain.activeclass.Icon);
+        image.Image.SetSprite(ClassesRemasteredMain.SelectedClass.Icon);
     }
 }

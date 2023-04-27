@@ -11,11 +11,11 @@ namespace ClassesRemastered
 {
     public abstract class BaseClass : ModContent
     {
-        public static bool IsSelected(BaseClass @class) => ClassesRemasteredMain.activeclass == @class;
+        public static bool IsSelected(BaseClass @class) => ClassesRemasteredMain.SelectedClass == @class;
 
         public override void Register()
         {
-
+            //Is required from ModContent
         }
         /// <summary>
         /// A cash multipler that is used to change cash gain

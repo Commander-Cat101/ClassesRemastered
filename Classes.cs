@@ -37,7 +37,7 @@ namespace ClassesRemastered
        
         public override void EditTower(Tower tower)
         {
-
+            //Nothing
         }
         
     }
@@ -216,7 +216,6 @@ namespace ClassesRemastered
                 case "WizardMonkey":
                     if (tower.towerModel.tiers[2] == 4)
                     {
-                        var newEmi = new NecromancerEmissionModel("EmissionModel", 1000, 50, 1, 5, 10, 50, 5, null, null, null, 5, 100, 10, 200, 2);
                         tower.towerModel.behaviors.First(a => a.name == "AttackModel_Attack Necromancer_").Cast<AttackModel>().weapons[0].emission.Cast<NecromancerEmissionModel>().maxRbeStored = 1000;
                         foreach (var weapon in towerModel.GetWeapons())
                         {
@@ -325,6 +324,8 @@ namespace ClassesRemastered
                     {
                         attackmodel.range *= .7f;
                     }
+                    break;
+                default:
                     break;
 
             }

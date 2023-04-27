@@ -10,19 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassesRemastered
-{
-    
-}
 [HarmonyPatch(typeof(AnalyticsTrackerSimManager), nameof(AnalyticsTrackerSimManager.OnCashEarned))]
-public class NoCash
+public static class NoCash
 {
     [HarmonyPrefix]
-    public static bool Prefix(ref double cash, ref Simulation.CashSource source)
+    public static bool Prefix(double cash, Simulation.CashSource source)
     {
         if (source != Simulation.CashSource.CoopTransferedCash && source != Simulation.CashSource.TowerSold)
         {
-            float multiplier = ClassesRemasteredMain.activeclass.CashMultiplier;
+            float multiplier = ClassesRemasteredMain.SelectedClass.CashMultiplier;
             multiplier -= 1f;
 
             cash *= multiplier;

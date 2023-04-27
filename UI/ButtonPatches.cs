@@ -12,7 +12,9 @@ internal static class MenuManager_OpenMenu
     private static void Postfix(MenuManager __instance, string menuName)
     {
         if (menuName == "MapSelectScreen")
+        {
             ClassesButton.Show();
+        }
     }
 }
 

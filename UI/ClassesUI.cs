@@ -19,9 +19,7 @@ using MelonLoader;
 namespace ClassesMenuUI;
 public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
 {
-    ModHelperPanel MainPanel;
     ModHelperScrollPanel ScrollPanel;
-    ModHelperPanel Panel;
 
     ModHelperText TitleText;
     ModHelperText DescriptionText;
@@ -33,7 +31,7 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
         var panelTransform = GameMenu.gameObject.GetComponentInChildrenByName<RectTransform>("Panel");
         var panel = panelTransform.gameObject;
         panel.DestroyAllChildren();
-        MainPanel = panel.AddModHelperPanel(new Info("ClassesMenu", 3600, 1900));
+        var MainPanel = panel.AddModHelperPanel(new Info("ClassesMenu", 3600, 1900));
         CreateLeftMenu(MainPanel);
         CreateRightMenu(MainPanel);
         return false;
@@ -45,20 +43,20 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
     }
     private void CreateRightMenu(ModHelperPanel ClassesMenu)
     {
-        Panel = ClassesMenu.AddPanel(new Info("RightMenu", 900, 0, 1600, 1900), VanillaSprites.MainBGPanelBlue);
+        var Panel = ClassesMenu.AddPanel(new Info("RightMenu", 900, 0, 1600, 1900), VanillaSprites.MainBGPanelBlue);
         var TitlePanel = Panel.AddPanel(new Info("ClassName", 0, 775, 1450, 200), VanillaSprites.BlueInsertPanelRound);
-        TitleText = TitlePanel.AddText(new Info("ClassNameText", 0, 0, 1450, 200), ClassesRemasteredMain.activeclass.Name, 150);
+        TitleText = TitlePanel.AddText(new Info("ClassNameText", 0, 0, 1450, 200), ClassesRemasteredMain.SelectedClass.Name, 150);
 
         var DescriptionPanel = Panel.AddPanel(new Info("ClassDescription", 0, 300, 1450, 700), VanillaSprites.BlueInsertPanelRound);
-        DescriptionText = DescriptionPanel.AddText(new Info("ClassDescriptionText", 0, 0, 1350, 700), ClassesRemasteredMain.activeclass.Description, 80);
+        DescriptionText = DescriptionPanel.AddText(new Info("ClassDescriptionText", 0, 0, 1350, 700), ClassesRemasteredMain.SelectedClass.Description, 80);
 
         EffectsPanel = Panel.AddScrollPanel(new Info("ClassEffect", 0, -500, 1450, 775), RectTransform.Axis.Vertical,VanillaSprites.BlueInsertPanelRound, 100, 100);
-        GenerateEffects(ClassesRemasteredMain.activeclass.EffectsHeight);
+        GenerateEffects(ClassesRemasteredMain.SelectedClass.EffectsHeight);
     }
     void GenerateEffects(int Height = 800)
     {
         
-        string Effects = "- Pros \n" + ClassesRemasteredMain.activeclass.Pros + "\n\n- Cons \n" + ClassesRemasteredMain.activeclass.Cons;
+        string Effects = "- Pros \n" + ClassesRemasteredMain.SelectedClass.Pros + "\n\n- Cons \n" + ClassesRemasteredMain.SelectedClass.Cons;
         if (EffectsPanel != null)
         {
             EffectsPanel.AddScrollContent(ModHelperText.Create(new Info("ClassEffectsText", 0, 0, 1400, Height), Effects, 80, TextAlignmentOptions.TopLeft));
@@ -73,35 +71,13 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
             ScrollPanel.AddScrollContent(CreateClass(@class));
         }
 
-        /*foreach (var Class in ClassesRemasteredMain.classes)
-        {
-            try
-            {
-                if (Class.ShowInSelector == true)
-                {
-                    ScrollPanel.AddScrollContent(CreateClass(Class));
-                }
-            }
-            catch { }
-        }
-        foreach (var Class in ClassesRemasteredMain.addonclasses)
-        {
-            try
-            {
-                if (Class.ShowInSelector == true)
-                {
-                    ScrollPanel.AddScrollContent(CreateClass(Class));
-                }
-            }
-            catch { }
-        }*/
     }
     void ReloadRightPanel()
     {
         EffectsPanel.ScrollContent.transform.DestroyAllChildren();
-        TitleText.SetText(ClassesRemasteredMain.activeclass.Name);
-        DescriptionText.SetText(ClassesRemasteredMain.activeclass.Description);
-        GenerateEffects(ClassesRemasteredMain.activeclass.EffectsHeight);
+        TitleText.SetText(ClassesRemasteredMain.SelectedClass.Name);
+        DescriptionText.SetText(ClassesRemasteredMain.SelectedClass.Description);
+        GenerateEffects(ClassesRemasteredMain.SelectedClass.EffectsHeight);
     }
     public ModHelperPanel CreateClass(BaseClass Class)
     {
@@ -118,7 +94,7 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
             ClassesButton.SetIcon();
         }));
         button.Image.SetSprite(Class.Icon);
-        if (ClassesRemasteredMain.activeclass.Name == Class.Name)
+        if (ClassesRemasteredMain.SelectedClass.Name == Class.Name)
         {
             button.AddImage(new Info("SelectedTick", 150, 150, 150, 150), VanillaSprites.SelectedTick);
         }
@@ -127,6 +103,6 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
     }
     private void SetClass(BaseClass Class)
     {
-        ClassesRemasteredMain.activeclass = Class;
+        ClassesRemasteredMain.SelectedClass = Class;
     }
 }

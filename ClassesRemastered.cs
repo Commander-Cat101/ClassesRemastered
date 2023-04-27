@@ -11,7 +11,7 @@ using Il2CppAssets.Scripts.Simulation.Objects;
 using Il2CppAssets.Scripts.Models;
 using BTD_Mod_Helper.Api;
 
-[assembly: MelonInfo(typeof(ClassesRemastered.ClassesRemasteredMain), ModHelperData.Name, ModHelperData.Version, ModHelperData.RepoOwner)]
+[assembly: MelonInfo(typeof(ClassesRemastered.ClassesRemasteredMain), ModHelperData.Name, ModHelperData.Version, ModHelperData.Author)]
 [assembly: MelonGame("Ninja Kiwi", "BloonsTD6")]
 [assembly: MelonPriority(99)]
 
@@ -19,7 +19,13 @@ namespace ClassesRemastered;
 
 public class ClassesRemasteredMain : BloonsTD6Mod
 {
-    public static BaseClass? activeclass = new None();
+    private static BaseClass? activeclass = new None();
+
+    public static BaseClass SelectedClass
+    {
+        get { return activeclass; }
+        set { activeclass = value; }
+    }
     public override void OnApplicationStart()
     {
         ModHelper.Msg<ClassesRemasteredMain>("ClassesRemastered loaded!");

@@ -46,9 +46,11 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
         var Panel = ClassesMenu.AddPanel(new Info("RightMenu", 900, 0, 1600, 1900), VanillaSprites.MainBGPanelBlue);
         var TitlePanel = Panel.AddPanel(new Info("ClassName", 0, 775, 1450, 200), VanillaSprites.BlueInsertPanelRound);
         TitleText = TitlePanel.AddText(new Info("ClassNameText", 0, 0, 1450, 200), ClassesRemasteredMain.SelectedClass.Name, 150);
+        TitleText.transform.GetComponent<NK_TextMeshProUGUI>().enableAutoSizing = true;
 
         var DescriptionPanel = Panel.AddPanel(new Info("ClassDescription", 0, 300, 1450, 700), VanillaSprites.BlueInsertPanelRound);
         DescriptionText = DescriptionPanel.AddText(new Info("ClassDescriptionText", 0, 0, 1350, 700), ClassesRemasteredMain.SelectedClass.Description, 80);
+        DescriptionText.transform.GetComponent<NK_TextMeshProUGUI>().enableAutoSizing = true;
 
         EffectsPanel = Panel.AddScrollPanel(new Info("ClassEffect", 0, -500, 1450, 775), RectTransform.Axis.Vertical,VanillaSprites.BlueInsertPanelRound, 100, 100);
         GenerateEffects(ClassesRemasteredMain.SelectedClass.EffectsHeight);
@@ -82,7 +84,8 @@ public class ClassesUI : ModGameMenu<ExtraSettingsScreen>
     public ModHelperPanel CreateClass(BaseClass Class)
     {
         var panel = ModHelperPanel.Create(new Info("ClassContent" + Class.Name, 0, 0, 1500, 700), VanillaSprites.MainBGPanelGrey);
-        panel.AddText(new Info("ClassName", -300, 250, 800, 100), Class.Name, 80, TextAlignmentOptions.TopLeft);
+        var name = panel.AddText(new Info("ClassName", -300, 250, 800, 100), Class.Name, 80, TextAlignmentOptions.TopLeft);
+        name.transform.GetComponent<NK_TextMeshProUGUI>().enableAutoSizing = true;
         var desc = panel.AddText(new Info("ClassDiscription", -350, -100, 700, 450), Class.Description, 60, TextAlignmentOptions.TopLeft);
         desc.transform.GetComponent<NK_TextMeshProUGUI>().enableAutoSizing = true;
 

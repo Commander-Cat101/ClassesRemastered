@@ -11,4 +11,4 @@ public static class ModHelperData
     public static string RepoOwner = "Commander-Cat101"; // TODO add your github username hero, also in the download url in README.md
     public static string RepoName = "ClassesRemastered"; // TODO add your repo name here, also in the download url in README.md
     public const string Author = "Commander__Cat";
-}
+} 
